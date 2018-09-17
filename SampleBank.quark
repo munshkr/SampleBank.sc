@@ -1,0 +1,7 @@
+(
+  \name: "SampleBank",
+  \summary: "A simple sample bank for managing buffers.",
+  \author: "Damián Silvani",
+  \version: "0.1.0",
+  \license: "GPL-3.0-or-later",
+)
