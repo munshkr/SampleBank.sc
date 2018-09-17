@@ -51,19 +51,19 @@ SynthDef(\vplaym, { |out=0, buf=0, rate=1, amp=0.5, pan=0, atk=0.01, rel=1, pos=
 // 1. Provide \bank and \index:
 (
 Pbind(\instrument, \vplaym,
-  \type, \sample,
-  \bank, Pseq([\klang, \Sutra], inf),
-  \index, Pseq((0..15), inf),
-  \dur, 0.125).play
+	\type, \sample,
+	\bank, Pseq([\klang, \Sutra], inf),
+	\index, Pseq((0..15), inf),
+	\dur, 0.125).play
 )
 
 // 2. Provide \sample key, which will be a string containing both bank name and
 // index separated by a colon (`:`):
 (
 Pbind(\instrument, \vplaym,
-  \type, \sample,
-  \sample, Pseq(["klang:3", "Sutra:1", "Sutra"], inf),
-  \dur, 0.125).play
+	\type, \sample,
+	\sample, Pseq(["klang:3", "Sutra:1", "Sutra"], inf),
+	\dur, 0.125).play
 )
 ```
 
@@ -76,7 +76,8 @@ Quarks.install("https://github.com/munshkr/SampleBank.sc");
 ```
 
 When quark is installed, recompile your class library. Go to `Language` menu,
-`Recompile class library`, or hit <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd>.
+`Recompile class library`, or hit
+<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd>.
 
 ## Contributing
 
