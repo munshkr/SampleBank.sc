@@ -34,7 +34,7 @@ SampleBank.get(\bd, 4) == SampleBank.get(\bd, 1)
 // ...
 
 // SampleBank adds a new Event type called \sample, which will try to add a \buf
-// key automatically based on some other keys. You have two possibilities:
+// key automatically based on some other keys.
 //
 // Suppose you have this Synthdef for playing mono samples
 (
@@ -48,21 +48,13 @@ SynthDef(\vplaym, { |out=0, buf=0, rate=1, amp=0.5, pan=0, atk=0.01, rel=1, pos=
 }).add;
 )
 //
-// 1. Provide \bank and \index:
+// You can now provide \bank and \index, and the \buf argument will be fetched
+// automatically:
 (
 Pbind(\instrument, \vplaym,
 	\type, \sample,
 	\bank, Pseq([\klang, \Sutra], inf),
 	\index, Pseq((0..15), inf),
-	\dur, 0.125).play
-)
-
-// 2. Provide \sample key, which will be a string containing both bank name and
-// index separated by a colon (`:`):
-(
-Pbind(\instrument, \vplaym,
-	\type, \sample,
-	\sample, Pseq(["klang:3", "Sutra:1", "Sutra"], inf),
 	\dur, 0.125).play
 )
 ```

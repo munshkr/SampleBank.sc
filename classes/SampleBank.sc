@@ -56,7 +56,6 @@ SampleBank {
 			var bufList = this.buffers[bank.asSymbol];
 			if (bufList.isNil.not) {
 				index = index % bufList.size;
-				"bufList[%] = %".format(index, bufList[index]).postln;
 				^bufList[index]
 			}
 		};
@@ -65,21 +64,12 @@ SampleBank {
 
 	*addEventType {
 		Event.addEventType(\sample, {
-			if (~buf.isNil) {
-				if (~bank.isNil.not && ~index.isNil.not) {
-					~buf = SampleBank.get(~bank, ~index)
-				} {
-					if (~sample.isNil.not) {
-						var pair, bank, index;
-						pair = ~sample.split($:);
-						bank = pair[0].asSymbol;
-						index = if (pair.size == 2) { pair[1].asInt } { 0 };
-						~buf = SampleBank.get(bank, index)
-					}
-				}
+			if (~buf.isNil && ~bank.isNil.not) {
+				var index = ~index ? 0;
+				~buf = SampleBank.get(~bank, index)
 			};
 			~type = \note;
-			currentEnvironment.postln.play
+			currentEnvironment.play
 		})
 	}
 }
