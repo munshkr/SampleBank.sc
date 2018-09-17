@@ -79,6 +79,13 @@ When quark is installed, recompile your class library. Go to `Language` menu,
 `Recompile class library`, or hit
 <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd>.
 
+## To do
+
+* Allow user to refresh and create buffers when new samples or banks have been
+  added at runtime.
+* When refreshing, delete buffers if file is not found anymore.
+* Method for freeing buffers in server, if it is running.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at
