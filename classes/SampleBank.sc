@@ -1,6 +1,8 @@
 SampleBank {
 	classvar <dir, <buffers;
 
+	const <supportedExtensions = #[\wav, \aiff];
+
 	*initClass {
 		buffers = Dictionary.new;
 		this.addEventType
@@ -28,7 +30,9 @@ SampleBank {
 		buffers.clear;
 
 		PathName(dir).entries.do { |subfolder|
-			var entries = subfolder.entries.select { |entry| entry.extension == "wav" }.collect { |entry|
+			var entries;
+			entries = subfolder.entries.select { |entry| supportedExtensions.includes(entry.extension.asSymbol) };
+			entries = entries.collect { |entry|
 				Buffer.readChannel(server, entry.fullPath, channels: [0])
 			};
 			if (entries.isEmpty.not) {

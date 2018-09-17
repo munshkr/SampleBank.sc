@@ -85,6 +85,8 @@ When quark is installed, recompile your class library. Go to `Language` menu,
   added at runtime.
 * When refreshing, delete buffers if file is not found anymore.
 * Method for freeing buffers in server, if it is running.
+* Allow user to load specific banks only
+* Create buffers in bundled messages
 
 ## Contributing
 
