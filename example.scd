@@ -1,10 +1,3 @@
-# SampleBank.sc
-
-A simple sample bank for managing buffers in SuperCollider.
-
-## Usage
-
-```supercollider
 // Set up SampleBank by pointing it to your sample bank directory
 SampleBank.loadAll(thisProcess.platform.userHomeDir ++ "/Samples/");
 
@@ -61,35 +54,3 @@ x.stop;
 
 // Finally, you can free buffers. This will also stop loading buffers on server boot.
 SampleBank.free
-```
-
-## Install
-
-Open a new document on your SC IDE and type:
-
-```
-Quarks.install("https://github.com/munshkr/SampleBank.sc");
-```
-
-When quark is installed, recompile your class library. Go to `Language` menu,
-`Recompile class library`, or hit
-<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd>.
-
-## To do
-
-* Allow user to refresh and create buffers when new samples or banks have been
-  added at runtime.
-* When refreshing, delete buffers if file is not found anymore.
-* Allow user to load specific banks only
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at
-https://github.com/munshkr/SampleBank.sc.  This project is intended to be a
-safe, welcoming space for collaboration, and contributors are expected to
-adhere to the [Contributor Covenant](http://contributor-covenant.org) code of
-conduct.
-
-## LICENSE
-
-See [LICENSE](LICENSE)
