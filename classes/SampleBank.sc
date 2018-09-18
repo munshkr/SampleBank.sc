@@ -1,59 +1,39 @@
 SampleBank {
 	classvar <dir, <buffers;
+	classvar makeBuffersFn;
 
 	const <supportedExtensions = #[\wav, \aiff];
 
 	*initClass {
 		buffers = Dictionary.new;
-		this.addEventType
+		makeBuffersFn = #{ |server| SampleBank.prMakeBuffers(server) };
+		this.prAddEventType
 	}
 
-	*init { |argDir, server|
+	*loadAll { |argDir, server|
 		dir = argDir;
-		if (dir.isNil) { Error("samples path is missing").throw };
+		if (dir.isNil) { Error("samples dir is missing").throw };
 		server = server ? Server.default;
 
-		// If server is the default and is not currently running,
-		// make sure that buffers are created on boot.
-		if (server == Server.default) {
-			ServerBoot.add({ this.makeBuffers(server) })
-		};
+		// Make sure that buffers are created on boot always
+		ServerBoot.add(makeBuffersFn, server);
 
-		// Otherwise, do it now...
+		// Now, if server is running, load them right now
 		if (server.serverRunning) {
-			this.makeBuffers(server)
+			this.prMakeBuffers(server)
 		};
 	}
 
-	*makeBuffers { |server|
+	*free { |server|
+		this.prFreeBuffers;
 		server = server ? Server.default;
-		buffers.clear;
-
-		PathName(dir).entries.do { |subfolder|
-			var entries;
-			entries = subfolder.entries.select { |entry| supportedExtensions.includes(entry.extension.asSymbol) };
-			entries = entries.collect { |entry|
-				Buffer.readChannel(server, entry.fullPath, channels: [0])
-			};
-			if (entries.isEmpty.not) {
-				buffers.add(subfolder.folderName.asSymbol -> entries)
-			}
-		}
-	}
-
-	*list {
-		^this.buffers.keys
-	}
-
-	*displayList {
-		^this.buffers.keysValuesDo { |bankName, buffers|
-			"% [%]".format(bankName, buffers.size).postln
-		}
+		ServerBoot.remove(makeBuffersFn, server);
+		"Sample banks freed".postln;
 	}
 
 	*get { |bank, index|
-		if (this.buffers.isNil.not) {
-			var bufList = this.buffers[bank.asSymbol];
+		if (buffers.isNil.not) {
+			var bufList = buffers[bank.asSymbol];
 			if (bufList.isNil.not) {
 				index = index % bufList.size;
 				^bufList[index]
@@ -62,7 +42,47 @@ SampleBank {
 		^nil
 	}
 
-	*addEventType {
+	*list {
+		^buffers.keys
+	}
+
+	*displayList {
+		^buffers.keysValuesDo { |bankName, buffers|
+			"% [%]".format(bankName, buffers.size).postln
+		}
+	}
+
+	*prFreeBuffers {
+		buffers.do { |banks|
+			banks.do { |buf|
+				if (buf.isNil.not) {
+					buf.free
+				}
+			}
+		};
+		buffers.clear;
+	}
+
+	*prMakeBuffers { |server|
+		this.prFreeBuffers;
+
+		PathName(dir).entries.do { |subfolder|
+			var entries;
+			entries = subfolder.entries.select { |entry|
+				supportedExtensions.includes(entry.extension.asSymbol)
+			};
+			entries = entries.collect { |entry|
+				Buffer.readChannel(server, entry.fullPath, channels: [0])
+			};
+			if (entries.isEmpty.not) {
+				buffers.add(subfolder.folderName.asSymbol -> entries)
+			}
+		};
+
+		"% sample banks loaded".format(buffers.size).postln;
+	}
+
+	*prAddEventType {
 		Event.addEventType(\sample, {
 			if (~buf.isNil && ~bank.isNil.not) {
 				var index = ~index ? 0;
