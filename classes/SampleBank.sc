@@ -84,9 +84,21 @@ SampleBank {
 
 	*prAddEventType {
 		Event.addEventType(\sample, {
-			if (~buf.isNil && ~bank.isNil.not) {
-				var index = ~index ? 0;
-				~buf = SampleBank.get(~bank, index)
+			if (~buf.isNil) {
+				var bank = ~bank;
+				if (bank.isNil.not) {
+					var index = ~index ? 0;
+					~buf = SampleBank.get(bank, index)
+				} {
+					var sample = ~sample;
+					if (sample.isNil.not) {
+						var pair, bank, index;
+						pair = sample.split($:);
+						bank = pair[0].asSymbol;
+						index = if (pair.size == 2) { pair[1].asInt } { 0 };
+						~buf = SampleBank.get(bank, index)
+					}
+				}
 			};
 			~type = \note;
 			currentEnvironment.play

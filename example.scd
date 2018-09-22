@@ -52,5 +52,14 @@ x = Pbind(\instrument, \vplaym,
 )
 x.stop;
 
+// Also, there's the \sample key, which will be a string containing both bank name and
+// index separated by a colon (`:`):
+(
+x = Pbind(\instrument, \vplaym,
+	\type, \sample,
+	\sample, Pseq(["klang:3", "Sutra:1", "Sutra"], inf),
+	\dur, 0.125).play
+)
+
 // Finally, you can free buffers. This will also stop loading buffers on server boot.
 SampleBank.free
